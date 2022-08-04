@@ -68,7 +68,7 @@ public void OnPluginStart() {
 
   g_EnableDemoUpload = CreateConVar("get5_upload_demos", "1", "Upload demo on post match.");
 
-  g_EnableSupportMessage = CreateConVar("get5_api_support_message", "1", "Enable a dono message every half time.");
+  g_EnableSupportMessage = CreateConVar("get5_api_support_message", "0", "Enable a dono message every half time.");
 
   g_APIKeyCvar =
       CreateConVar("get5_web_api_key", "", "Match API key, this is automatically set through rcon", FCVAR_DONTRECORD);
