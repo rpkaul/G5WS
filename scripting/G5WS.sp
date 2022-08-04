@@ -62,7 +62,7 @@ public Plugin myinfo = {
 public void OnPluginStart() {
   InitDebugLog("get5_debug", "G5WS");
   LogDebug("OnPluginStart version=%s", PLUGIN_VERSION);
-  g_UseSVGCvar = CreateConVar("get5_use_svg", "0", "support svg team logos");
+  g_UseSVGCvar = CreateConVar("get5_use_svg", "1", "support svg team logos");
   HookConVarChange(g_UseSVGCvar, LogoBasePathChanged);
   g_LogoBasePath = g_UseSVGCvar.BoolValue ? LOGO_DIR : LEGACY_LOGO_DIR;
 
