@@ -68,7 +68,7 @@ public void OnPluginStart() {
 
   g_EnableDemoUpload = CreateConVar("get5_upload_demos", "1", "Upload demo on post match.");
 
-  g_EnableSupportMessage = CreateConVar("get5_api_support_message", "0", "Enable a dono message every half time.");
+  g_EnableSupportMessage = CreateConVar("get5_api_support_message", "1", "Enable a dono message every half time.");
 
   g_APIKeyCvar =
       CreateConVar("get5_web_api_key", "", "Match API key, this is automatically set through rcon", FCVAR_DONTRECORD);
@@ -740,9 +740,9 @@ public void Get5_OnRoundEnd(const Get5RoundEndedEvent event) {
 
       // Regulation halftime. (after round 15)
       if (event.RoundNumber == roundsPerHalf) {
-        Get5_MessageToAll("This match has been brought to you by G5API!");
+        Get5_MessageToAll("");
         if (g_EnableSupportMessage.BoolValue) {
-          Get5_MessageToAll("Consider supporting @ https://github.com/phlexplexico/G5API !");
+          Get5_MessageToAll("");
         }
       }
 
@@ -751,9 +751,9 @@ public void Get5_OnRoundEnd(const Get5RoundEndedEvent event) {
         int otround = event.RoundNumber - 2 * roundsPerHalf;  // round 33 -> round 3, etc.
         // Do side swaps at OT halves (rounds 3, 9, ...)
         if ((otround + roundsPerOTHalf) % (2 * roundsPerOTHalf) == 0) {
-          Get5_MessageToAll("This match has been brought to you by G5API!");
+          Get5_MessageToAll("");
           if (g_EnableSupportMessage.BoolValue) {
-            Get5_MessageToAll("Consider supporting @ https://github.com/phlexplexico/G5API !");
+            Get5_MessageToAll("");
           }
         }
       }
