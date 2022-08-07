@@ -730,36 +730,6 @@ public void Get5_OnRoundStart(const Get5RoundStartedEvent event) {
   return;
 }
 
-public void Get5_OnRoundEnd(const Get5RoundEndedEvent event) {
-  int roundsPerHalf = GetCvarIntSafe("mp_maxrounds") / 2;
-  int roundsPerOTHalf = GetCvarIntSafe("mp_overtime_maxrounds") / 2;
-
-  bool halftimeEnabled = (GetCvarIntSafe("mp_halftime") != 0);
-
-  if (halftimeEnabled) {
-
-      // Regulation halftime. (after round 15)
-      if (event.RoundNumber == roundsPerHalf) {
-        Get5_MessageToAll("");
-        if (g_EnableSupportMessage.BoolValue) {
-          Get5_MessageToAll("");
-        }
-      }
-
-      // Now in OT.
-      if (event.RoundNumber >= 2 * roundsPerHalf) {
-        int otround = event.RoundNumber - 2 * roundsPerHalf;  // round 33 -> round 3, etc.
-        // Do side swaps at OT halves (rounds 3, 9, ...)
-        if ((otround + roundsPerOTHalf) % (2 * roundsPerOTHalf) == 0) {
-          Get5_MessageToAll("");
-          if (g_EnableSupportMessage.BoolValue) {
-            Get5_MessageToAll("");
-          }
-        }
-      }
-    }
-}
-
 stock bool LoadBackupFromUrl(const char[] url) {
   char cleanedUrl[1024];
   char configPath[PLATFORM_MAX_PATH];
