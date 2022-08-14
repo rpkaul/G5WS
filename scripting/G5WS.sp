@@ -62,13 +62,13 @@ public Plugin myinfo = {
 public void OnPluginStart() {
   InitDebugLog("get5_debug", "G5WS");
   LogDebug("OnPluginStart version=%s", PLUGIN_VERSION);
-  g_UseSVGCvar = CreateConVar("get5_use_svg", "1", "support svg team logos");
+  g_UseSVGCvar = CreateConVar("get5_use_svg", "0", "support svg team logos");
   HookConVarChange(g_UseSVGCvar, LogoBasePathChanged);
   g_LogoBasePath = g_UseSVGCvar.BoolValue ? LOGO_DIR : LEGACY_LOGO_DIR;
 
   g_EnableDemoUpload = CreateConVar("get5_upload_demos", "1", "Upload demo on post match.");
 
-  g_EnableSupportMessage = CreateConVar("get5_api_support_message", "0", "Enable a dono message every half time.");
+  g_EnableSupportMessage = CreateConVar("get5_api_support_message", "1", "Enable a dono message every half time.");
 
   g_APIKeyCvar =
       CreateConVar("get5_web_api_key", "", "Match API key, this is automatically set through rcon", FCVAR_DONTRECORD);
@@ -728,6 +728,36 @@ public void Get5_OnRoundStart(const Get5RoundStartedEvent event) {
     LogDebug("COMPLETE!");
   }
   return;
+}
+
+public void Get5_OnRoundEnd(const Get5RoundEndedEvent event) {
+  int roundsPerHalf = GetCvarIntSafe("mp_maxrounds") / 2;
+  int roundsPerOTHalf = GetCvarIntSafe("mp_overtime_maxrounds") / 2;
+
+  bool halftimeEnabled = (GetCvarIntSafe("mp_halftime") != 0);
+
+  if (halftimeEnabled) {
+
+      // Regulation halftime. (after round 15)
+      if (event.RoundNumber == roundsPerHalf) {
+        Get5_MessageToAll("This match has been brought to you by LOTGaming");
+        if (g_EnableSupportMessage.BoolValue) {
+          Get5_MessageToAll("Consider supporting @ https://github.com/phlexplexico/G5API !");
+        }
+      }
+
+      // Now in OT.
+      if (event.RoundNumber >= 2 * roundsPerHalf) {
+        int otround = event.RoundNumber - 2 * roundsPerHalf;  // round 33 -> round 3, etc.
+        // Do side swaps at OT halves (rounds 3, 9, ...)
+        if ((otround + roundsPerOTHalf) % (2 * roundsPerOTHalf) == 0) {
+          Get5_MessageToAll("This match has been brought to you by LOTGaming!");
+          if (g_EnableSupportMessage.BoolValue) {
+            Get5_MessageToAll("Consider supporting @ https://github.com/phlexplexico/G5API !");
+          }
+        }
+      }
+    }
 }
 
 stock bool LoadBackupFromUrl(const char[] url) {
